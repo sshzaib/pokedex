@@ -2,7 +2,8 @@ package main
 
 func commandMap(config *config) error {
 	client := config.pokeapiClient
-	res, err := client.GetLocationAreas(config.nextLocationAreaURL)
+	cache := config.cache
+	res, err := client.GetLocationAreas(config.nextLocationAreaURL, cache)
 	if err != nil {
 		return err
 	}

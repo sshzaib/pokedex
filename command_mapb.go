@@ -2,7 +2,8 @@ package main
 
 func commandMapb(config *config) error {
 	client := config.pokeapiClient
-	res, err := client.GetLocationAreas(config.prevLocationAreaURL)
+	cache := config.cache
+	res, err := client.GetLocationAreas(config.prevLocationAreaURL, cache)
 	if err != nil {
 		return err
 	}
