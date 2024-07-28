@@ -11,7 +11,7 @@ import (
 type cliCommands struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func StartRepl(config *config) {
@@ -19,13 +19,21 @@ func StartRepl(config *config) {
 	for {
 		fmt.Print("pokedex >")
 		scanner.Scan()
-		commandName := scanner.Text()
-		commandName = formatCommand(commandName)
+		text := scanner.Text()
+		commandName := formatCommand(text)
+		commands := getCommands()
+		if len(commandName) == 2 {
+			command, ok := commands[commandName[0]]
+			if !ok {
+				log.Fatal("invalid command: Enter help command to see all the valid commands")
+			}
+			command.callback(config, commandName...)
+			continue
+		}
 		if len(commandName) == 0 {
 			continue
 		}
-		commands := getCommands()
-		command, ok := commands[commandName]
+		command, ok := commands[commandName[0]]
 		if !ok {
 			log.Fatal("invalid command: Enter help command to see all the valid commands")
 		}
@@ -55,11 +63,17 @@ func getCommands() map[string]cliCommands {
 			description: "Display Previous Pokemon Locations",
 			callback:    commandMapb,
 		},
+		"explore": {
+			name:        "explore",
+			description: "Display Pokemons in The Location",
+			callback:    commandExplore,
+		},
 	}
 	return cliCammands
 }
 
-func formatCommand(command string) string {
+func formatCommand(command string) []string {
 	commandLower := strings.ToLower(command)
-	return commandLower
+	commandSlice := strings.Split(commandLower, " ")
+	return commandSlice
 }

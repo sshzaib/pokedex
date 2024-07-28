@@ -17,5 +17,6 @@ func main() {
 		pokeapiClient: pokeapi.NewClient(),
 		cache:         pokecache.NewCache(),
 	}
+	//go config.cache.ReapFunc()
 	StartRepl(&config)
 }

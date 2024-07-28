@@ -1,6 +1,6 @@
 package main
 
-func commandMapb(config *config) error {
+func commandMapb(config *config, args ...string) error {
 	client := config.pokeapiClient
 	cache := config.cache
 	res, err := client.GetLocationAreas(config.prevLocationAreaURL, cache)

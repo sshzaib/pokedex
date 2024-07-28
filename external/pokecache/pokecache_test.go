@@ -24,7 +24,7 @@ func TestAddGetCache(t *testing.T) {
 		if !ok {
 			t.Errorf("%v not found", tcase.input)
 		}
-		if string(val.data) != string(tcase.expected) {
+		if string(val) != string(tcase.expected) {
 			t.Errorf("Error: cache data not the same\n expected: %v \n actual: %v\n", tcase.expected, val)
 		}
 	}

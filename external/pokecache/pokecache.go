@@ -1,9 +1,13 @@
 package pokecache
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 type Cache struct {
 	cache map[string]CacheEntry
+	mu    sync.Mutex
 }
 
 type CacheEntry struct {
@@ -11,9 +15,23 @@ type CacheEntry struct {
 	createdAt time.Time
 }
 
+func (c *Cache) ReapFunc() {
+	interval := 5 * time.Hour
+	for {
+		for url, cacheEntry := range c.cache {
+			if time.Since(cacheEntry.createdAt) > interval {
+				c.mu.Lock()
+				delete(c.cache, url)
+				c.mu.Unlock()
+			}
+		}
+	}
+}
+
 func NewCache() Cache {
 	return Cache{
 		cache: make(map[string]CacheEntry),
+		mu:    sync.Mutex{},
 	}
 }
 
