@@ -1,9 +1,13 @@
 package pokecache
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestAddGetCache(t *testing.T) {
-	cache := NewCache()
+	interval := 3 * time.Second
+	cache := NewCache(interval)
 
 	cases := []struct {
 		input    string
@@ -28,4 +32,21 @@ func TestAddGetCache(t *testing.T) {
 			t.Errorf("Error: cache data not the same\n expected: %v \n actual: %v\n", tcase.expected, val)
 		}
 	}
+}
+
+func TestReapLoop(t *testing.T) {
+	interval := 3 * time.Second
+	cache := NewCache(interval)
+	go cache.reapLoop(3 * time.Second)
+	cache.AddCache("key1", []byte("val1"))
+
+	if val, ok := cache.GetCache("key1"); !ok {
+		t.Errorf("test1: failed\n returned no cache\n expected %v \ngot: %v", "val1", val)
+	}
+	time.Sleep(4 * time.Second)
+
+	if val, ok := cache.GetCache("key1"); ok {
+		t.Errorf("test2: failed\n returned the key\n expected: %v got: %v", "val1", val)
+	}
+
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/sshzaib/pokedex/external/pokeapi"
 	"github.com/sshzaib/pokedex/external/pokecache"
 )
@@ -13,10 +15,10 @@ type config struct {
 }
 
 func main() {
-	config := config{
+	interval := 3 * time.Second
+	config := &config{
 		pokeapiClient: pokeapi.NewClient(),
-		cache:         pokecache.NewCache(),
+		cache:         *pokecache.NewCache(interval),
 	}
-	//go config.cache.ReapFunc()
-	StartRepl(&config)
+	StartRepl(config)
 }

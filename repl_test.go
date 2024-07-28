@@ -7,25 +7,25 @@ import (
 func TestFormatCommandFunc(t *testing.T) {
 	cases := []struct {
 		input    string
-		expected string
+		expected []string
 	}{
 		{
 			input:    "HELLO",
-			expected: "hello",
+			expected: []string{"hello"},
 		},
 		{
 			input:    "WoRlD",
-			expected: "world",
+			expected: []string{"world"},
 		},
 		{
 			input:    "",
-			expected: "",
+			expected: []string{""},
 		},
 	}
 
 	for _, cs := range cases {
 		actual := formatCommand(cs.input)
-		if actual != cs.expected {
+		if actual[0] != cs.expected[0] {
 			t.Errorf("command is not formatted correctly:\n actual: %v\n expected: %v\n", actual, cs.expected)
 			continue
 		}
