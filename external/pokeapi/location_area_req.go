@@ -12,6 +12,7 @@ const baseURL = "https://pokeapi.co/api/v2"
 
 func (c *Client) GetLocationAreas(pageURL *string, cache *pokecache.Cache) (LocationAreasResponse, error) {
 	endpoint := "/location-area"
+
 	fullURL := baseURL + endpoint
 	if pageURL != nil {
 		fullURL = *pageURL

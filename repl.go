@@ -17,11 +17,14 @@ type cliCommands struct {
 func StartRepl(config *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
-		fmt.Print("pokedex >")
+		fmt.Print("pokedex > ")
 		scanner.Scan()
 		text := scanner.Text()
 		commandName := formatCommand(text)
 		commands := getCommands()
+		if commandName[0] == "" {
+			continue
+		}
 		if len(commandName) == 2 {
 			command, ok := commands[commandName[0]]
 			if !ok {
@@ -30,9 +33,7 @@ func StartRepl(config *config) {
 			command.callback(config, commandName...)
 			continue
 		}
-		if len(commandName) == 0 {
-			continue
-		}
+
 		command, ok := commands[commandName[0]]
 		if !ok {
 			log.Fatal("invalid command: Enter help command to see all the valid commands")
@@ -67,6 +68,21 @@ func getCommands() map[string]cliCommands {
 			name:        "explore",
 			description: "Display Pokemons in The Location",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch {Pokemon Name}",
+			description: "Try to Catch Pokemon",
+			callback:    commandCatch,
+		},
+		"inspect": {
+			name:        "inspect {Pokemon Name}",
+			description: "Inspect Pokemon if it is caught",
+			callback:    commandInspect,
+		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Display all the Pokemons in the Pokedex",
+			callback:    commandPokedex,
 		},
 	}
 	return cliCammands
