@@ -23,7 +23,6 @@ func (c *Client) GetPokemonInLocation(location []string, cache *pokecache.Cache)
 		}
 		return Pokemon{}, nil
 	}
-	fmt.Println("cache miss")
 	res, err := c.httpClient.Get(fullURL)
 	if err != nil {
 		return Pokemon{}, err
@@ -67,7 +66,6 @@ func (c *Client) CatchPokemon(pokemonName string, cache *pokecache.Cache) (Singl
 			return SinglePokemon{}, nil
 		}
 	}
-	fmt.Println("cache miss")
 	res, err := c.httpClient.Get(fullURL)
 	if err != nil {
 		fmt.Println(err)

@@ -19,7 +19,6 @@ func (c *Client) GetLocationAreas(pageURL *string, cache *pokecache.Cache) (Loca
 	}
 
 	if data, ok := cache.GetCache(fullURL); ok {
-		fmt.Println("cache hit")
 		locationAreaResponse := LocationAreasResponse{}
 		if err := json.Unmarshal(data, &locationAreaResponse); err != nil {
 			return LocationAreasResponse{}, err
@@ -29,7 +28,6 @@ func (c *Client) GetLocationAreas(pageURL *string, cache *pokecache.Cache) (Loca
 		}
 		return locationAreaResponse, nil
 	}
-	fmt.Println("cache miss")
 	res, err := c.httpClient.Get(fullURL)
 	if err != nil {
 		return LocationAreasResponse{}, err
